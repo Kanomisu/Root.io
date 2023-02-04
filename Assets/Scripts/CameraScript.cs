@@ -35,12 +35,12 @@ public class CameraScript : MonoBehaviour
     {
         if (player.transform.position.y <= gameObject.transform.position.y + bottomBound)
         {
-            Debug.Log("player is below bottom bound");
+            //Debug.Log("player is below bottom bound");
             gameObject.transform.position -= Vector3.down * (2 + player.transform.position.y - gameObject.transform.position.y + bottomBound) * Time.fixedDeltaTime;
         }
         else
         {
-            Debug.Log("player is between ceiling and bottom bound");
+            //Debug.Log("player is between ceiling and bottom bound");
             gameObject.transform.position += Vector3.down * Time.fixedDeltaTime;
         }
 
