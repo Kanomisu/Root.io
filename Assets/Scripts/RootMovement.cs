@@ -29,16 +29,21 @@ public class RootMovement : MonoBehaviour
     void Start()
     {
         oldPosition = gameObject.transform.position;
+        lRenderer.SetPosition(0, gameObject.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        lRenderer.SetPosition(nodes.Count, gameObject.transform.position);
+        if (nodes.Count == 0)
+            lRenderer.SetPosition(1, gameObject.transform.position);
+
+        else
+            lRenderer.SetPosition(nodes.Count, gameObject.transform.position);
 
         poopTime += Time.deltaTime;
 
-        if (poopTime >= poopThreshold * (baseVelocity / gameObject.GetComponent<Rigidbody2D>().velocity.magnitude))
+        if (poopTime >= poopThreshold * (Mathf.Pow(baseVelocity / gameObject.GetComponent<Rigidbody2D>().velocity.magnitude, 0.7f)))
         {
             nodes.Add(Instantiate(poop, oldPosition, Quaternion.identity));
 
