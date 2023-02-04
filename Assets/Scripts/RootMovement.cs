@@ -6,7 +6,7 @@ public class RootMovement : MonoBehaviour
 {
     float horizInput;
     float vertInput;
-    [SerializeField] Camera mainCam;
+    //[SerializeField] Camera mainCam;
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
     [SerializeField] LineRenderer lRenderer;
