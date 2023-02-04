@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class ObstacleSpawn : MonoBehaviour
 {
-    [SerializeField] float spawnDifferenceMin = 5f;
-    [SerializeField] float spawnDifferenceMax = 10f;
-
     [SerializeField] List<GameObject> obstacles;
     [SerializeField] GameObject wallObj;
+    [SerializeField] GameObject dirtTile;  
 
     [SerializeField] Camera mainCam;
 
@@ -17,6 +15,7 @@ public class ObstacleSpawn : MonoBehaviour
     [SerializeField] int divisions = 6;
     [SerializeField] int minColumnSpawns = 2;
     [SerializeField] int maxColumnSpawns = 10;
+    [SerializeField] GameObject obstacleParent;
 
     int layer = -1;
     float layerHeight;
@@ -33,8 +32,16 @@ public class ObstacleSpawn : MonoBehaviour
         if (mainCam.transform.position.y <= -layerHeight * layer)
         {
             layer++;
-            Instantiate(wallObj, new Vector3(-30f, -layer * layerHeight, 0f), Quaternion.identity);
-            Instantiate(wallObj, new Vector3(30f, -layer * layerHeight, 0f), Quaternion.identity);
+
+            GameObject parentEmpty = new GameObject(); 
+            parentEmpty.name = "Layer" + layer;
+
+            Instantiate(wallObj, new Vector3(-30f, -layer * layerHeight, 0f), Quaternion.identity).transform.parent = parentEmpty.transform;
+            Instantiate(wallObj, new Vector3(30f, -layer * layerHeight, 0f), Quaternion.identity).transform.parent = parentEmpty.transform;
+
+            GameObject newDirt = Instantiate(dirtTile, new Vector3(0f, -layer * layerHeight, 5f), Quaternion.identity);
+            newDirt.GetComponent<SpriteRenderer>().size = new Vector2(worldWidth, layerHeight);
+            newDirt.transform.parent = parentEmpty.transform;
 
             for (int i = 0; i < divisions; i++)
             {
@@ -50,11 +57,16 @@ public class ObstacleSpawn : MonoBehaviour
 
                     int obstacleSpawned = Random.Range(0, obstacles.Count);
 
-                    Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.identity);
+                    Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.identity).transform.parent = parentEmpty.transform;
                 }
             }
+
+            parentEmpty.transform.parent = obstacleParent.transform;
+
+            if (layer >= 2)
+            {
+                GameObject.Find("Layer" + (layer - 2)).SetActive(false);
+            }
         }
-
-
     }
 }

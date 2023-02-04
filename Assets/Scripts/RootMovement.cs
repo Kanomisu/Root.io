@@ -15,6 +15,8 @@ public class RootMovement : MonoBehaviour
     [SerializeField] float maxVelocity = 6f;
     [SerializeField] float speedUpTime = 3f;
 
+    [SerializeField] GameObject rootParent;
+
     float targetAngle = 0;
 
     float poopTime = 0f;
@@ -23,6 +25,9 @@ public class RootMovement : MonoBehaviour
 
     float currentSpeedTime = 0f;
 
+    int nodeParentNum = 0;
+    GameObject currentNodeParent;
+
     List<GameObject> nodes = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -30,6 +35,10 @@ public class RootMovement : MonoBehaviour
     {
         oldPosition = gameObject.transform.position;
         lRenderer.SetPosition(0, gameObject.transform.position);
+
+        currentNodeParent = new GameObject();
+        currentNodeParent.name = "Nodes0";
+        currentNodeParent.transform.parent = rootParent.transform;
     }
 
     // Update is called once per frame
@@ -46,12 +55,31 @@ public class RootMovement : MonoBehaviour
         if (poopTime >= poopThreshold * (Mathf.Pow(baseVelocity / gameObject.GetComponent<Rigidbody2D>().velocity.magnitude, 0.7f)))
         {
             nodes.Add(Instantiate(poop, oldPosition, Quaternion.identity));
+            nodes[nodes.Count - 1].transform.parent = rootParent.transform;
+            nodes[nodes.Count - 1].transform.parent = currentNodeParent.transform;
 
             poopTime = 0f;
 
             oldPosition = gameObject.transform.position;
 
             DrawNodeConnection();
+
+            if (nodes.Count % 50 == 0)
+            {
+                nodeParentNum++;
+
+                GameObject nodesParent = new GameObject();
+
+                nodesParent.name = "Nodes" + nodeParentNum;
+                nodesParent.transform.parent = rootParent.transform;
+
+                currentNodeParent = nodesParent;
+
+                if (nodeParentNum >= 2)
+                {
+                    GameObject.Find("Nodes" + (nodeParentNum - 2)).SetActive(false);
+                }
+            }
         }
     }
 
