@@ -9,12 +9,15 @@ public class RootMovement : MonoBehaviour
     [SerializeField] Camera mainCam;
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
+    [SerializeField] LineRenderer lRenderer;
 
     float targetAngle = 0;
 
     float poopTime = 0f;
 
     Vector3 oldPosition;
+
+    List<GameObject> nodes = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -39,13 +42,27 @@ public class RootMovement : MonoBehaviour
 
         if (poopTime >= poopThreshold)
         {
-            Instantiate(poop, oldPosition, Quaternion.identity);
+            nodes.Add(Instantiate(poop, oldPosition, Quaternion.identity));
 
             poopTime = 0f;
 
             oldPosition = gameObject.transform.position;
+
+            DrawNodeConnection();
         }
     }
 
+    void DrawNodeConnection()
+    {
+        lRenderer.positionCount = nodes.Count;
 
+        lRenderer.SetPosition(nodes.Count - 1, nodes[nodes.Count - 1].transform.position);
+
+        /*
+        if (nodes.Count >= 2)
+        {
+            
+        }
+        */
+    }
 }
