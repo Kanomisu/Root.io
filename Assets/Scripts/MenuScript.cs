@@ -19,7 +19,6 @@ public class MenuScript : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene("RootScene");
-        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        SceneManager.LoadScene("RootScene", LoadSceneMode.Single);
     }
 }
