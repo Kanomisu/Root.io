@@ -26,6 +26,7 @@ public class ScoreManager : MonoBehaviour
         {
             AddScore(100);
             depthMilestone -= 20;
+            CameraScript.instance.speedUp(0.3f);
             Debug.Log("Depth Milestone passed, 100 points");
         }
     }

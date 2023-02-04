@@ -33,7 +33,7 @@ public class WaterUI : MonoBehaviour
         }
         else
         {
-            Debug.Log("Dehydrated");
+            //Debug.Log("Dehydrated");
         }
     }
 
