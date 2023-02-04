@@ -10,6 +10,8 @@ public class RootMovement : MonoBehaviour
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
 
+    float targetAngle = 0;
+
     float poopTime = 0f;
 
     Vector3 oldPosition;
@@ -25,7 +27,9 @@ public class RootMovement : MonoBehaviour
     {
         horizInput = Input.GetAxis("Horizontal");
 
-        gameObject.transform.Rotate(new Vector3(0f, 0f, 0.5f * horizInput));
+        targetAngle += horizInput * -3;
+
+        gameObject.GetComponent<Rigidbody2D>().SetRotation(targetAngle);
 
         gameObject.GetComponent<Rigidbody2D>().velocity = -3 * gameObject.transform.up;
 
@@ -41,7 +45,6 @@ public class RootMovement : MonoBehaviour
 
             oldPosition = gameObject.transform.position;
         }
-
     }
 
 
