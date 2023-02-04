@@ -73,7 +73,7 @@ public class RootMovement : MonoBehaviour
         if (vertInput >= 1)
         {
             if (currentSpeedTime < speedUpTime)
-                currentSpeedTime += Time.deltaTime;
+                currentSpeedTime += Time.fixedDeltaTime;
 
             else
                 currentSpeedTime = speedUpTime;
@@ -81,7 +81,7 @@ public class RootMovement : MonoBehaviour
 
         else if (currentSpeedTime > 0f)
         {
-            currentSpeedTime -= 2 * Time.deltaTime;
+            currentSpeedTime -= 2 * Time.fixedDeltaTime;
 
             if (currentSpeedTime < 0)
                 currentSpeedTime = 0f;
@@ -89,7 +89,7 @@ public class RootMovement : MonoBehaviour
 
         gameObject.GetComponent<Rigidbody2D>().velocity = -Mathf.Lerp(baseVelocity, maxVelocity, currentSpeedTime / speedUpTime) * gameObject.transform.up;
 
-        mainCam.gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, mainCam.gameObject.transform.position.z);
+        //mainCam.gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, mainCam.gameObject.transform.position.z);
 
         //Debug.Log(gameObject.GetComponent<Rigidbody2D>().velocity.magnitude);
     }
