@@ -6,7 +6,6 @@ public class CameraScript : MonoBehaviour
 {
     public static CameraScript instance;
     [SerializeField] GameObject player;
-    [SerializeField] GameObject objectParent;
     float bottomBound = -3f;
     float speedFactor = 1f;
     float timer = 0f;
@@ -43,17 +42,12 @@ public class CameraScript : MonoBehaviour
         {
             endGame = true;
             endPos = transform.position;
-
-            for (int i = 0; i < objectParent.transform.childCount; i++)
-            {
-                objectParent.transform.GetChild(i).gameObject.SetActive(true);
-            }
         }
 
         if (endGame)
         {
             timer += Time.fixedDeltaTime / 10;
-            transform.position = Vector3.Lerp(endPos, new Vector3(0f, 8f, -10), timer);
+            transform.position = Vector3.Lerp(endPos, Vector3.up, timer);
         }
     }
 }

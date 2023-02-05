@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ObstacleSpawn : MonoBehaviour
 {
-    [SerializeField] List<GameObject> obstacles = new List<GameObject>();
-    [SerializeField] List<int> spawnChances = new List<int>();
+    [SerializeField] List<GameObject> obstacles;
     [SerializeField] GameObject wallObj;
     [SerializeField] GameObject dirtTile;  
 
@@ -21,17 +20,10 @@ public class ObstacleSpawn : MonoBehaviour
     int layer = -1;
     float layerHeight;
 
-    int totalChance = 0;
-
     // Start is called before the first frame update
     void Start()
     {
         layerHeight = wallObj.transform.localScale.y * wallObj.GetComponent<SpriteRenderer>().size.y;
-
-        for (int i = 0; i < spawnChances.Count; i++)
-        {
-            totalChance += spawnChances[i];
-        }
     }
 
     // Update is called once per frame
@@ -70,27 +62,9 @@ public class ObstacleSpawn : MonoBehaviour
                         Random.Range(rangePerObject * j, rangePerObject * (j + 1)) - ((layer + 0.5f) * layerHeight), 
                         0f);
 
-                    int obstacleSpawned = Random.Range(0, totalChance);
-                    int currentTotal = 0;
+                    int obstacleSpawned = Random.Range(0, obstacles.Count);
 
-                    for (int k = 0; k <= spawnChances.Count; k++)
-                    {
-                        currentTotal += spawnChances[k];
-
-                        if (currentTotal >= obstacleSpawned)
-                        {
-                            obstacleSpawned = k;
-                            break;
-                        }
-                    }
-
-                    Vector3 eulers;
-
-                    if (obstacles[obstacleSpawned].CompareTag("Water"))
-                        eulers = new Vector3(0f, 0f, 0f);
-
-                    else
-                        eulers = new Vector3(0f, 0f, Random.Range(0f, 360f));
+                    Vector3 eulers = new Vector3(0f, 0f, Random.Range(0f, 360f));
 
                     Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.Euler(eulers)).transform.parent = parentEmpty.transform;
                 }
