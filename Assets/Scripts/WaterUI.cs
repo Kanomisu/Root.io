@@ -7,6 +7,7 @@ public class WaterUI : MonoBehaviour
 {
     public Slider waterMeter;
     float maxWater = 1000;
+    float minWater = 0;
     float currentWater;
     public static WaterUI instance;
 
@@ -30,6 +31,11 @@ public class WaterUI : MonoBehaviour
         if (currentWater > 0)
         {
             waterMeter.value = currentWater;
+
+            if (CameraScript.instance.endGame == true)
+            {
+                waterMeter.value = minWater; 
+            }
         }
     }
 
