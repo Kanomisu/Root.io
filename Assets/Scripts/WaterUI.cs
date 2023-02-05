@@ -36,8 +36,15 @@ public class WaterUI : MonoBehaviour
     //For when you collide with a pocket of water
     public void WaterAddition(int amount)
     {
-        currentWater += amount;
-        waterMeter.value = currentWater;
+        if (amount + currentWater > maxWater)
+        {
+            currentWater = maxWater;
+        }
+        else
+        {
+            currentWater += amount;
+            waterMeter.value = currentWater;
+        }
     }
     public void WaterSubtraction(int amount)
     {
