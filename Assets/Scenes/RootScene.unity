@@ -3429,7 +3429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poopThreshold: 0.3
   poop: {fileID: 581390267}
-  hitScreen: {fileID: 0}
+  hitScreen: {fileID: 2005927223}
   lRendererFront: {fileID: 1353834067}
   lRendererBack: {fileID: 721804734}
   baseVelocity: 3
