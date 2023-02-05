@@ -10,6 +10,7 @@ public class RootMovement : MonoBehaviour
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
     [SerializeField] GameObject hitScreen;
+    [SerializeField] GameObject tutorial;
     [SerializeField] LineRenderer lRendererFront;
     [SerializeField] LineRenderer lRendererBack;
 
@@ -35,6 +36,9 @@ public class RootMovement : MonoBehaviour
     float collisionGracePeriod = 2f;
     bool isInvincible = true;
 
+    float tutorialTimer = 8f;
+    bool faded = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +53,23 @@ public class RootMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        tutorialTimer -= Time.deltaTime;
+
+        if (tutorialTimer <= 0f && !faded)
+        {
+            var colour = tutorial.GetComponent<Image>().color;
+
+            colour.a -= Time.deltaTime * 0.5f;
+
+            if (colour.a <= 0)
+            {
+                colour.a = 0f;
+                faded = true;
+            }
+
+            tutorial.GetComponent<Image>().color = colour;
+        }
+
         if (nodes.Count == 0)
             lRendererFront.SetPosition(1, gameObject.transform.position);
 
