@@ -9,7 +9,7 @@ public class WaterPocket : MonoBehaviour
         if (other.tag.Equals("Player"))
         {
             Debug.Log("Slurp");
-            WaterUI.instance.WaterAddition(40);
+            WaterUI.instance.WaterAddition(100);
             ScoreManager.instance.AddScore(100);
         }
     }

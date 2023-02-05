@@ -165,9 +165,11 @@ public class RootMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        collision.gameObject.GetComponent<Collider2D>().enabled = false;
+
         if (collision.gameObject.CompareTag("Obstacle") && !isInvincible)
         {
-            WaterUI.instance.WaterSubtraction(10);
+            WaterUI.instance.WaterSubtraction(100);
 
             isInvincible = true;
             collisionGracePeriod = 2f;
