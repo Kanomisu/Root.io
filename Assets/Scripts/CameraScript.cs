@@ -14,6 +14,8 @@ public class CameraScript : MonoBehaviour
     Vector3 newPos;
     public bool endGame = false;
 
+    bool spawnedTree = false;
+
     private void Awake()
     {
         instance = this;
@@ -44,8 +46,11 @@ public class CameraScript : MonoBehaviour
 
         else
         {
-            if (!endGame)
+            if (!spawnedTree)
+            {
                 newPos = new Vector3(0f, TreeSpawner.instance.SpawnTree().transform.position.y, -10f);
+                spawnedTree = true;
+            }
                 //newPos = new Vector3(0f, 30f, -10);
 
             endGame = true;

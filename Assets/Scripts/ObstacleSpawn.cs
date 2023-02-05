@@ -46,7 +46,7 @@ public class ObstacleSpawn : MonoBehaviour
         currentRowSpawns = Mathf.Min(ScoreManager.instance.depthLevel + minRowSpawns, maxMinRowSpawns);
         currentColumnSpawns = Mathf.Min(ScoreManager.instance.depthLevel + minColumnSpawns, maxMinColumnSpawns);
 
-        if (mainCam.transform.position.y <= -layerHeight * layer)
+        if (mainCam.transform.position.y <= -layerHeight * layer )
         {
             layer++;
 
@@ -67,51 +67,54 @@ public class ObstacleSpawn : MonoBehaviour
             newDirt.GetComponent<SpriteRenderer>().size = new Vector2(worldWidth, layerHeight);
             newDirt.transform.parent = parentEmpty.transform;
 
-            int numRows = Random.Range(currentRowSpawns, currentRowSpawns + rowSpawnsRange);
-
-            for (int i = 0; i < numRows; i++)
+            if (mainCam.transform.position.y > -540f)
             {
-                int numInColumn = Random.Range(currentColumnSpawns, currentColumnSpawns + columnSpawnRange);
+                int numRows = Random.Range(currentRowSpawns, currentRowSpawns + rowSpawnsRange);
 
-                float rangePerObject = layerHeight / (float)numInColumn;
-
-                for (int j = 0; j < numInColumn; j++)
+                for (int i = 0; i < numRows; i++)
                 {
-                    Vector3 spawnLoc = new Vector3(Random.Range((worldWidth / numRows) * i, (worldWidth / numRows) * (i + 1)) - worldWidth / 2f, 
-                        Random.Range(rangePerObject * j, rangePerObject * (j + 1)) - ((layer + 0.5f) * layerHeight), 
-                        0f);
+                    int numInColumn = Random.Range(currentColumnSpawns, currentColumnSpawns + columnSpawnRange);
 
-                    int obstacleSpawned = Random.Range(0, totalChance);
-                    int currentTotal = 0;
+                    float rangePerObject = layerHeight / (float)numInColumn;
 
-                    for (int k = 0; k <= spawnChances.Count; k++)
+                    for (int j = 0; j < numInColumn; j++)
                     {
-                        currentTotal += spawnChances[k];
+                        Vector3 spawnLoc = new Vector3(Random.Range((worldWidth / numRows) * i, (worldWidth / numRows) * (i + 1)) - worldWidth / 2f,
+                            Random.Range(rangePerObject * j, rangePerObject * (j + 1)) - ((layer + 0.5f) * layerHeight),
+                            0f);
 
-                        if (currentTotal >= obstacleSpawned)
+                        int obstacleSpawned = Random.Range(0, totalChance);
+                        int currentTotal = 0;
+
+                        for (int k = 0; k <= spawnChances.Count; k++)
                         {
-                            obstacleSpawned = k;
-                            break;
+                            currentTotal += spawnChances[k];
+
+                            if (currentTotal >= obstacleSpawned)
+                            {
+                                obstacleSpawned = k;
+                                break;
+                            }
                         }
+
+                        Vector3 eulers;
+
+                        if (obstacles[obstacleSpawned].CompareTag("Water"))
+                            eulers = new Vector3(0f, 0f, 0f);
+
+                        else
+                            eulers = new Vector3(0f, 0f, Random.Range(0f, 360f));
+
+                        Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.Euler(eulers)).transform.parent = parentEmpty.transform;
                     }
-
-                    Vector3 eulers;
-
-                    if (obstacles[obstacleSpawned].CompareTag("Water"))
-                        eulers = new Vector3(0f, 0f, 0f);
-
-                    else
-                        eulers = new Vector3(0f, 0f, Random.Range(0f, 360f));
-
-                    Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.Euler(eulers)).transform.parent = parentEmpty.transform;
                 }
-            }
 
-            parentEmpty.transform.parent = obstacleParent.transform;
+                parentEmpty.transform.parent = obstacleParent.transform;
 
-            if (layer >= 2)
-            {
-                GameObject.Find("Layer" + (layer - 2)).SetActive(false);
+                if (layer >= 2)
+                {
+                    GameObject.Find("Layer" + (layer - 2)).SetActive(false);
+                }
             }
         }
     }
