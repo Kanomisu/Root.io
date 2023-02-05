@@ -8,10 +8,15 @@ public class ScoreManager : MonoBehaviour
     public int score;
     [SerializeField] GameObject player;
     public int depthMilestone = -20;
+    public int depthLevel = 0;
+    public int milestoneNum = 20;
+    public int milestoneScore = 100;
 
     private void Awake()
     {
         instance = this;
+
+        milestoneNum = -depthMilestone;
     }
 
     public void AddScore(int added)
@@ -24,8 +29,9 @@ public class ScoreManager : MonoBehaviour
     {
         if (player.transform.position.y < depthMilestone)
         {
-            AddScore(100);
-            depthMilestone -= 20;
+            AddScore(milestoneScore);
+            depthMilestone -= milestoneNum;
+            depthLevel++;
             CameraScript.instance.speedUp(0.3f);
             Debug.Log("Depth Milestone passed, 100 points");
         }

@@ -101,8 +101,17 @@ public class RootMovement : MonoBehaviour
 
     void HandleInput()
     {
-        horizInput = Input.GetAxis("Horizontal");
-        vertInput = Input.GetAxis("Vertical");
+        if (CameraScript.instance.endGame)
+        {
+            horizInput = 0f;
+            vertInput = 0f;
+        }
+
+        else
+        {
+            horizInput = Input.GetAxis("Horizontal");
+            vertInput = Input.GetAxis("Vertical");
+        }
     }
 
     void MoveRoot()
@@ -130,7 +139,11 @@ public class RootMovement : MonoBehaviour
                 currentSpeedTime = 0f;
         }
 
-        gameObject.GetComponent<Rigidbody2D>().velocity = -Mathf.Lerp(baseVelocity, maxVelocity, currentSpeedTime / speedUpTime) * gameObject.transform.up;
+        if (CameraScript.instance.endGame)
+            gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+
+        else
+            gameObject.GetComponent<Rigidbody2D>().velocity = -Mathf.Lerp(baseVelocity, maxVelocity, currentSpeedTime / speedUpTime) * gameObject.transform.up;
 
         //mainCam.gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, mainCam.gameObject.transform.position.z);
 
@@ -142,10 +155,25 @@ public class RootMovement : MonoBehaviour
         if (nodes.Count < 12)
             lRendererFront.positionCount = nodes.Count + 1;
 
+        else if (nodes.Count == 12)
+        {
+            lRendererBack.positionCount = 3;
+            lRendererBack.SetPosition(0, lRendererFront.GetPosition(0));
+            lRendererBack.SetPosition(1, lRendererFront.GetPosition(1));
+            lRendererBack.SetPosition(2, lRendererFront.GetPosition(2));
+
+            for (int i = 0; i < 11; i++)
+            {
+                lRendererFront.SetPosition(i, lRendererFront.GetPosition(i + 1));
+            }
+        }
+
         else
         {
-            lRendererBack.positionCount = nodes.Count - 11;
-            lRendererBack.SetPosition(nodes.Count - 12, lRendererFront.GetPosition(2));
+            lRendererBack.positionCount = nodes.Count - 9;
+            lRendererBack.SetPosition(nodes.Count - 12, lRendererFront.GetPosition(0));
+            lRendererBack.SetPosition(nodes.Count - 11, lRendererFront.GetPosition(1));
+            lRendererBack.SetPosition(nodes.Count - 10, lRendererFront.GetPosition(2));
 
             for (int i = 0; i < 11; i++)
             {
@@ -165,9 +193,22 @@ public class RootMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        collision.gameObject.GetComponent<Collider2D>().enabled = false;
+        if (!collision.gameObject.CompareTag("Wall"))
+            collision.gameObject.GetComponent<Collider2D>().enabled = false;
 
-        if (collision.gameObject.CompareTag("Obstacle") && !isInvincible)
+        if ((collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Wall")) && !isInvincible)
+        {
+            WaterUI.instance.WaterSubtraction(100);
+
+            isInvincible = true;
+            collisionGracePeriod = 2f;
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log("Staying");
+        if (collision.gameObject.CompareTag("Wall") && !isInvincible)
         {
             WaterUI.instance.WaterSubtraction(100);
 

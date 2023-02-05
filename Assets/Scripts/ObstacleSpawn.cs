@@ -13,10 +13,16 @@ public class ObstacleSpawn : MonoBehaviour
 
     [Header("Obstcale Generation Properties")]
     [SerializeField] float worldWidth = 60f;
-    [SerializeField] int divisions = 6;
+    [SerializeField] int minRowSpawns = 2;
+    [SerializeField] int rowSpawnsRange = 5;
+    [SerializeField] int maxMinRowSpawns = 5;
     [SerializeField] int minColumnSpawns = 2;
-    [SerializeField] int maxColumnSpawns = 10;
+    [SerializeField] int columnSpawnRange = 5;
+    [SerializeField] int maxMinColumnSpawns = 5;
     [SerializeField] GameObject obstacleParent;
+
+    int currentRowSpawns;
+    int currentColumnSpawns;
 
     int layer = -1;
     float layerHeight;
@@ -37,6 +43,9 @@ public class ObstacleSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentRowSpawns = Mathf.Min(ScoreManager.instance.depthLevel + minRowSpawns, maxMinRowSpawns);
+        currentColumnSpawns = Mathf.Min(ScoreManager.instance.depthLevel + minColumnSpawns, maxMinColumnSpawns);
+
         if (mainCam.transform.position.y <= -layerHeight * layer)
         {
             layer++;
@@ -45,12 +54,12 @@ public class ObstacleSpawn : MonoBehaviour
             parentEmpty.name = "Layer" + layer;
 
             Instantiate(wallObj, new Vector3(-worldWidth / 2 - (wallObj.transform.localScale.x * wallObj.GetComponent<SpriteRenderer>().size.x) / 2f, 
-                -layer * layerHeight, 3f), 
+                -layer * layerHeight, -1f), 
                 Quaternion.identity)
                 .transform.parent = parentEmpty.transform;
 
             Instantiate(wallObj, new Vector3(worldWidth / 2 + (wallObj.transform.localScale.x * wallObj.GetComponent<SpriteRenderer>().size.x) / 2f, 
-                -layer * layerHeight, 3f), 
+                -layer * layerHeight, -1f), 
                 Quaternion.identity)
                 .transform.parent = parentEmpty.transform;
 
@@ -58,15 +67,17 @@ public class ObstacleSpawn : MonoBehaviour
             newDirt.GetComponent<SpriteRenderer>().size = new Vector2(worldWidth, layerHeight);
             newDirt.transform.parent = parentEmpty.transform;
 
-            for (int i = 0; i < divisions; i++)
+            int numRows = Random.Range(currentRowSpawns, currentRowSpawns + rowSpawnsRange);
+
+            for (int i = 0; i < numRows; i++)
             {
-                int numInColumn = Random.Range(minColumnSpawns, maxColumnSpawns);
+                int numInColumn = Random.Range(currentColumnSpawns, currentColumnSpawns + columnSpawnRange);
 
                 float rangePerObject = layerHeight / (float)numInColumn;
 
                 for (int j = 0; j < numInColumn; j++)
                 {
-                    Vector3 spawnLoc = new Vector3(Random.Range((worldWidth / divisions) * i, (worldWidth / divisions) * (i + 1)) - worldWidth / 2f, 
+                    Vector3 spawnLoc = new Vector3(Random.Range((worldWidth / numRows) * i, (worldWidth / numRows) * (i + 1)) - worldWidth / 2f, 
                         Random.Range(rangePerObject * j, rangePerObject * (j + 1)) - ((layer + 0.5f) * layerHeight), 
                         0f);
 
