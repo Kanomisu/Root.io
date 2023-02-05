@@ -125,6 +125,12 @@ public class RootMovement : MonoBehaviour
             horizInput = Input.GetAxis("Horizontal");
             vertInput = Input.GetAxis("Vertical");
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Bye Bye");
+            Application.Quit();
+        }
     }
 
     void MoveRoot()
