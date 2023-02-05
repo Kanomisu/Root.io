@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager instance;
     public int score;
     [SerializeField] GameObject player;
-    private int depthMilestone = -20;
+    public int depthMilestone = -20;
 
     private void Awake()
     {
