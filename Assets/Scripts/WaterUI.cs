@@ -45,11 +45,13 @@ public class WaterUI : MonoBehaviour
         if (amount + currentWater > maxWater)
         {
             currentWater = maxWater;
+            GetComponent<AudioSource>().Play();
         }
         else
         {
             currentWater += amount;
             waterMeter.value = currentWater;
+            GetComponent<AudioSource>().Play();
         }
     }
     public void WaterSubtraction(int amount)
