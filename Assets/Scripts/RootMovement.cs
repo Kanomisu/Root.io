@@ -221,6 +221,12 @@ public class RootMovement : MonoBehaviour
             isInvincible = true;
             collisionGracePeriod = 2f;
         }
+
+        if (collision.gameObject.CompareTag("Fountain"))
+        {
+            ScoreManager.instance.AddScore(100);
+            CameraScript.instance.endGame = true;
+        }
     }
 
     private void OnCollisionStay(Collision collision)
