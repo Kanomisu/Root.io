@@ -26,7 +26,7 @@ public class WaterUI : MonoBehaviour
     //Deplete the water meter
     void Update()
     {
-        currentWater -= Time.deltaTime * 10;
+        currentWater -= Time.deltaTime * 12;
 
         if (currentWater > 0)
         {
