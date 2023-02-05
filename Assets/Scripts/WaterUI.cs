@@ -31,10 +31,6 @@ public class WaterUI : MonoBehaviour
         {
             waterMeter.value = currentWater;
         }
-        else
-        {
-            //Debug.Log("Dehydrated");
-        }
     }
 
     //For when you collide with a pocket of water
@@ -47,5 +43,9 @@ public class WaterUI : MonoBehaviour
     {
         currentWater -= amount;
         waterMeter.value = currentWater;
+    }
+    public float GetWaterLevel()
+    {
+        return currentWater;
     }
 }

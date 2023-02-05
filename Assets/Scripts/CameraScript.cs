@@ -8,6 +8,9 @@ public class CameraScript : MonoBehaviour
     [SerializeField] GameObject player;
     float bottomBound = -3f;
     float speedFactor = 1f;
+    float timer = 0f;
+    Vector3 endPos;
+    bool endGame = false;
 
     private void Awake()
     {
@@ -21,16 +24,30 @@ public class CameraScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (player.transform.position.y <= gameObject.transform.position.y + bottomBound)
+        if (WaterUI.instance.GetWaterLevel() > 0)
         {
-            //Debug.Log("player is below bottom bound");
-            gameObject.transform.position -= Vector3.down * speedFactor * (2 + player.transform.position.y - gameObject.transform.position.y + bottomBound) * Time.fixedDeltaTime;
+
+            if (player.transform.position.y <= gameObject.transform.position.y + bottomBound)
+            {
+                //Debug.Log("player is below bottom bound");
+                gameObject.transform.position -= Vector3.down * speedFactor * (2 + player.transform.position.y - gameObject.transform.position.y + bottomBound) * Time.fixedDeltaTime;
+            }
+            else
+            {
+                //Debug.Log("player is between ceiling and bottom bound");
+                gameObject.transform.position += Vector3.down * speedFactor * Time.fixedDeltaTime;
+            }
         }
         else
         {
-            //Debug.Log("player is between ceiling and bottom bound");
-            gameObject.transform.position += Vector3.down * speedFactor * Time.fixedDeltaTime;
+            endGame = true;
+            endPos = transform.position;
         }
 
+        if (endGame)
+        {
+            timer += Time.fixedDeltaTime / 10;
+            transform.position = Vector3.Lerp(endPos, Vector3.up, timer);
+        }
     }
 }
