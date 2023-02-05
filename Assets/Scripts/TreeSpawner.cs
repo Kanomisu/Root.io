@@ -53,7 +53,7 @@ public class TreeSpawner : MonoBehaviour
         }
 
         lastPiece = Instantiate(treeTop, lastPiece.transform.position + 
-            new Vector3(0f, treeMiddle.GetComponent<SpriteRenderer>().bounds.size.y / 2f + treeTop.GetComponent<SpriteRenderer>().bounds.size.y / 2f, 0f), 
+            new Vector3(0f, lastPiece.GetComponent<SpriteRenderer>().bounds.size.y / 2f + treeTop.GetComponent<SpriteRenderer>().bounds.size.y / 2f, 0f), 
             Quaternion.identity);
 
         Debug.Log("Final Score:" + ScoreManager.instance.score);
