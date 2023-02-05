@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class RootMovement : MonoBehaviour
 {
     float horizInput;
@@ -9,6 +9,7 @@ public class RootMovement : MonoBehaviour
     //[SerializeField] Camera mainCam;
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
+    [SerializeField] GameObject hitScreen;
     [SerializeField] LineRenderer lRendererFront;
     [SerializeField] LineRenderer lRendererBack;
 
@@ -83,6 +84,18 @@ public class RootMovement : MonoBehaviour
                 {
                     GameObject.Find("Nodes" + (nodeParentNum - 2)).SetActive(false);
                 }
+            }
+        }
+
+        if (hitScreen != null)
+        {
+            if (hitScreen.GetComponent<Image>().color.a > 0)
+            {
+                var color = hitScreen.GetComponent<Image>().color;
+
+                color.a -= 0.01f;
+
+                hitScreen.GetComponent<Image>().color = color;
             }
         }
     }
@@ -198,6 +211,11 @@ public class RootMovement : MonoBehaviour
 
         if ((collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Wall")) && !isInvincible)
         {
+            if (CameraScript.instance.endGame == false)
+            {
+                hitDetected();
+            }
+
             WaterUI.instance.WaterSubtraction(100);
 
             isInvincible = true;
@@ -215,5 +233,13 @@ public class RootMovement : MonoBehaviour
             isInvincible = true;
             collisionGracePeriod = 2f;
         }
+    }
+
+    void hitDetected()
+    {
+        var color = hitScreen.GetComponent<Image>().color;
+        color.a = 0.8f;
+
+        hitScreen.GetComponent<Image>().color = color;
     }
 }
