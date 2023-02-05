@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class WaterUI : MonoBehaviour
 {
     public Slider waterMeter;
-    float maxWater = 100;
+    float maxWater = 1000;
     float currentWater;
     public static WaterUI instance;
 
