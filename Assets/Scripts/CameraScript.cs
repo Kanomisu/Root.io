@@ -26,7 +26,7 @@ public class CameraScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (WaterUI.instance.GetWaterLevel() > 0 && player.transform.position.y < gameObject.transform.position.y + gameObject.GetComponent<Camera>().orthographicSize)
+        if (WaterUI.instance.GetWaterLevel() > 0 && player.transform.position.y < gameObject.transform.position.y + gameObject.GetComponent<Camera>().orthographicSize && !endGame)
         {
 
             if (player.transform.position.y <= gameObject.transform.position.y + bottomBound)
@@ -44,11 +44,12 @@ public class CameraScript : MonoBehaviour
 
         else
         {
+            if (!endGame)
+                newPos = new Vector3(0f, TreeSpawner.instance.SpawnTree().transform.position.y, -10f);
+                //newPos = new Vector3(0f, 30f, -10);
+
             endGame = true;
             endPos = transform.position;
-
-            //newPos = TreeSpawner.instance.SpawnTree().transform.position;
-            newPos = new Vector3(0f, 30f, -10);
 
             for (int i = 0; i < objectParent.transform.childCount; i++)
             {
@@ -58,7 +59,7 @@ public class CameraScript : MonoBehaviour
 
         if (endGame)
         {
-            timer += Time.fixedDeltaTime / 5;
+            timer += Time.fixedDeltaTime / 10;
             transform.position = Vector3.Lerp(endPos, newPos, timer);
         }
     }

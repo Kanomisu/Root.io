@@ -155,10 +155,25 @@ public class RootMovement : MonoBehaviour
         if (nodes.Count < 12)
             lRendererFront.positionCount = nodes.Count + 1;
 
+        else if (nodes.Count == 12)
+        {
+            lRendererBack.positionCount = 3;
+            lRendererBack.SetPosition(0, lRendererFront.GetPosition(0));
+            lRendererBack.SetPosition(1, lRendererFront.GetPosition(1));
+            lRendererBack.SetPosition(2, lRendererFront.GetPosition(2));
+
+            for (int i = 0; i < 11; i++)
+            {
+                lRendererFront.SetPosition(i, lRendererFront.GetPosition(i + 1));
+            }
+        }
+
         else
         {
-            lRendererBack.positionCount = nodes.Count - 11;
-            lRendererBack.SetPosition(nodes.Count - 12, lRendererFront.GetPosition(2));
+            lRendererBack.positionCount = nodes.Count - 9;
+            lRendererBack.SetPosition(nodes.Count - 12, lRendererFront.GetPosition(0));
+            lRendererBack.SetPosition(nodes.Count - 11, lRendererFront.GetPosition(1));
+            lRendererBack.SetPosition(nodes.Count - 10, lRendererFront.GetPosition(2));
 
             for (int i = 0; i < 11; i++)
             {

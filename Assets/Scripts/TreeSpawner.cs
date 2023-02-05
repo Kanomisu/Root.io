@@ -31,28 +31,32 @@ public class TreeSpawner : MonoBehaviour
 
         GameObject lastPiece;
 
-        lastPiece = Instantiate(treeBase, rootOrigin.transform.position + new Vector3(0f, treeBase.transform.localScale.y / 2f, -2f), Quaternion.identity);
+        lastPiece = Instantiate(treeBase, rootOrigin.transform.position + new Vector3(0f, 0f, -2f), Quaternion.identity);
 
         if (numPieces >= 1)
         {
             numPieces -= 1;
 
-            lastPiece =  Instantiate(treeMiddle, lastPiece.transform.position + new Vector3(0f, 
-                                lastPiece.transform.localScale.y / 2f + treeMiddle.transform.localScale.y / 2f, 0f), 
-                                Quaternion.identity);
+            lastPiece =  Instantiate(treeMiddle, lastPiece.transform.position + 
+                new Vector3(0f, lastPiece.GetComponent<SpriteRenderer>().bounds.size.y / 2f + treeMiddle.GetComponent<SpriteRenderer>().bounds.size.y / 2f, 0f), 
+                Quaternion.identity);
         }
 
         while (numPieces > 0)
         {
             numPieces--;
 
-            lastPiece = Instantiate(treeMiddle, lastPiece.transform.position + new Vector3(0f, treeMiddle.transform.localScale.y, 0f), Quaternion.identity);
+            lastPiece = Instantiate(treeMiddle, lastPiece.transform.position + new Vector3(0f, treeMiddle.GetComponent<SpriteRenderer>().bounds.size.y, 0f), Quaternion.identity);
+
+            Debug.Log(treeMiddle.transform.localScale.y);
 
         }
 
         lastPiece = Instantiate(treeTop, lastPiece.transform.position + 
-            new Vector3(0f, treeMiddle.transform.localScale.y / 2f + treeTop.transform.localScale.y / 2f, -2f), 
+            new Vector3(0f, treeMiddle.GetComponent<SpriteRenderer>().bounds.size.y / 2f + treeTop.GetComponent<SpriteRenderer>().bounds.size.y / 2f, 0f), 
             Quaternion.identity);
+
+        Debug.Log("Final Score:" + ScoreManager.instance.score);
 
         return lastPiece;
     }
