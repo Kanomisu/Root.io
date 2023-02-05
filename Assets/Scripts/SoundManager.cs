@@ -11,7 +11,7 @@ public class SoundManager : MonoBehaviour
     {
         audioSound = GetComponent<AudioSource>();
         audioSound.clip = clipSound;
-        audioSound.volume = 0.2f;
+        audioSound.volume = 0.15f;
         audioSound.playOnAwake = true;
         audioSound.loop = true;
         audioSound.Play();
