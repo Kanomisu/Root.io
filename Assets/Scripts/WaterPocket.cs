@@ -10,7 +10,7 @@ public class WaterPocket : MonoBehaviour
         {
             Debug.Log("Slurp");
             WaterUI.instance.WaterAddition(100);
-            ScoreManager.instance.AddScore(100);
+            ScoreManager.instance.AddScore(20);
         }
     }
 }
