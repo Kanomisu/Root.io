@@ -21,4 +21,10 @@ public class MenuScript : MonoBehaviour
     {
         SceneManager.LoadScene("RootScene", LoadSceneMode.Single);
     }
+
+    public void ExitGame()
+    {
+        Debug.Log("Bye Bye");
+        Application.Quit();
+    }
 }
