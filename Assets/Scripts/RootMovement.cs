@@ -9,7 +9,8 @@ public class RootMovement : MonoBehaviour
     //[SerializeField] Camera mainCam;
     [SerializeField] float poopThreshold = 1f;
     [SerializeField] GameObject poop;
-    [SerializeField] LineRenderer lRenderer;
+    [SerializeField] LineRenderer lRendererFront;
+    [SerializeField] LineRenderer lRendererBack;
 
     [SerializeField] float baseVelocity = 3f;
     [SerializeField] float maxVelocity = 6f;
@@ -34,7 +35,7 @@ public class RootMovement : MonoBehaviour
     void Start()
     {
         oldPosition = gameObject.transform.position;
-        lRenderer.SetPosition(0, gameObject.transform.position);
+        lRendererFront.SetPosition(0, gameObject.transform.position);
 
         currentNodeParent = new GameObject();
         currentNodeParent.name = "Nodes0";
@@ -45,10 +46,10 @@ public class RootMovement : MonoBehaviour
     void Update()
     {
         if (nodes.Count == 0)
-            lRenderer.SetPosition(1, gameObject.transform.position);
+            lRendererFront.SetPosition(1, gameObject.transform.position);
 
         else
-            lRenderer.SetPosition(nodes.Count, gameObject.transform.position);
+            lRendererFront.SetPosition(lRendererFront.positionCount - 1, gameObject.transform.position);
 
         poopTime += Time.deltaTime;
 
@@ -129,11 +130,23 @@ public class RootMovement : MonoBehaviour
 
     void DrawNodeConnection()
     {
-        lRenderer.positionCount = nodes.Count + 1;
+        if (nodes.Count < 12)
+            lRendererFront.positionCount = nodes.Count + 1;
 
-        lRenderer.SetPosition(nodes.Count - 1, nodes[nodes.Count - 1].transform.position);
+        else
+        {
+            lRendererBack.positionCount = nodes.Count - 11;
+            lRendererBack.SetPosition(nodes.Count - 12, lRendererFront.GetPosition(2));
 
-        lRenderer.SetPosition(nodes.Count, gameObject.transform.position);
+            for (int i = 0; i < 11; i++)
+            {
+                lRendererFront.SetPosition(i, lRendererFront.GetPosition(i + 1));
+            }
+        }
+
+        lRendererFront.SetPosition(lRendererFront.positionCount - 2, nodes[nodes.Count - 1].transform.position);
+
+        lRendererFront.SetPosition(lRendererFront.positionCount - 1, gameObject.transform.position);
 
         if (nodes.Count >= 2)
         {

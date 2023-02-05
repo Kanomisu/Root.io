@@ -23,7 +23,7 @@ public class ObstacleSpawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        layerHeight = wallObj.transform.localScale.y;
+        layerHeight = wallObj.transform.localScale.y * wallObj.GetComponent<SpriteRenderer>().size.y;
     }
 
     // Update is called once per frame
@@ -36,8 +36,15 @@ public class ObstacleSpawn : MonoBehaviour
             GameObject parentEmpty = new GameObject(); 
             parentEmpty.name = "Layer" + layer;
 
-            Instantiate(wallObj, new Vector3(-30f, -layer * layerHeight, 0f), Quaternion.identity).transform.parent = parentEmpty.transform;
-            Instantiate(wallObj, new Vector3(30f, -layer * layerHeight, 0f), Quaternion.identity).transform.parent = parentEmpty.transform;
+            Instantiate(wallObj, new Vector3(-worldWidth / 2 - (wallObj.transform.localScale.x * wallObj.GetComponent<SpriteRenderer>().size.x) / 2f, 
+                -layer * layerHeight, 3f), 
+                Quaternion.identity)
+                .transform.parent = parentEmpty.transform;
+
+            Instantiate(wallObj, new Vector3(worldWidth / 2 + (wallObj.transform.localScale.x * wallObj.GetComponent<SpriteRenderer>().size.x) / 2f, 
+                -layer * layerHeight, 3f), 
+                Quaternion.identity)
+                .transform.parent = parentEmpty.transform;
 
             GameObject newDirt = Instantiate(dirtTile, new Vector3(0f, -layer * layerHeight, 5f), Quaternion.identity);
             newDirt.GetComponent<SpriteRenderer>().size = new Vector2(worldWidth, layerHeight);
@@ -57,7 +64,9 @@ public class ObstacleSpawn : MonoBehaviour
 
                     int obstacleSpawned = Random.Range(0, obstacles.Count);
 
-                    Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.identity).transform.parent = parentEmpty.transform;
+                    Vector3 eulers = new Vector3(0f, 0f, Random.Range(0f, 360f));
+
+                    Instantiate(obstacles[obstacleSpawned], spawnLoc, Quaternion.Euler(eulers)).transform.parent = parentEmpty.transform;
                 }
             }
 
