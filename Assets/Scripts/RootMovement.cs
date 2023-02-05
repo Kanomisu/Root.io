@@ -55,19 +55,19 @@ public class RootMovement : MonoBehaviour
     {
         tutorialTimer -= Time.deltaTime;
 
-        if (tutorialTimer <= 0f && !faded)
-        {
-            var colour = tutorial.GetComponent<Image>().color;
-
-            colour.a -= Time.deltaTime * 0.5f;
-
-            if (colour.a <= 0)
-            {
-                colour.a = 0f;
-                faded = true;
-            }
-
-            tutorial.GetComponent<Image>().color = colour;
+        if (tutorialTimer <= 0f && !faded)
+        {
+            var colour = tutorial.GetComponent<Image>().color;
+
+            colour.a -= Time.deltaTime * 0.5f;
+
+            if (colour.a <= 0)
+            {
+                colour.a = 0f;
+                faded = true;
+            }
+
+            tutorial.GetComponent<Image>().color = colour;
         }
 
         if (nodes.Count == 0)
@@ -147,10 +147,10 @@ public class RootMovement : MonoBehaviour
             vertInput = Input.GetAxis("Vertical");
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("Bye Bye");
-            Application.Quit();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Bye Bye");
+            Application.Quit();
         }
     }
 
@@ -247,6 +247,12 @@ public class RootMovement : MonoBehaviour
 
             isInvincible = true;
             collisionGracePeriod = 2f;
+        }
+
+        if (collision.gameObject.CompareTag("Fountain"))
+        {
+            ScoreManager.instance.AddScore(100);
+            CameraScript.instance.endGame = true;
         }
     }
 
