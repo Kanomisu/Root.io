@@ -11,7 +11,8 @@ public class CameraScript : MonoBehaviour
     float speedFactor = 1f;
     float timer = 0f;
     Vector3 endPos;
-    bool endGame = false;
+    Vector3 newPos;
+    public bool endGame = false;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class CameraScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (WaterUI.instance.GetWaterLevel() > 0)
+        if (WaterUI.instance.GetWaterLevel() > 0 && player.transform.position.y < gameObject.transform.position.y + gameObject.GetComponent<Camera>().orthographicSize)
         {
 
             if (player.transform.position.y <= gameObject.transform.position.y + bottomBound)
@@ -33,16 +34,21 @@ public class CameraScript : MonoBehaviour
                 //Debug.Log("player is below bottom bound");
                 gameObject.transform.position -= Vector3.down * speedFactor * (2 + player.transform.position.y - gameObject.transform.position.y + bottomBound) * Time.fixedDeltaTime;
             }
+
             else
             {
                 //Debug.Log("player is between ceiling and bottom bound");
                 gameObject.transform.position += Vector3.down * speedFactor * Time.fixedDeltaTime;
             }
         }
+
         else
         {
             endGame = true;
             endPos = transform.position;
+
+            //newPos = TreeSpawner.instance.SpawnTree().transform.position;
+            newPos = new Vector3(0f, 30f, -10);
 
             for (int i = 0; i < objectParent.transform.childCount; i++)
             {
@@ -52,8 +58,8 @@ public class CameraScript : MonoBehaviour
 
         if (endGame)
         {
-            timer += Time.fixedDeltaTime / 10;
-            transform.position = Vector3.Lerp(endPos, new Vector3(0f, 8f, -10), timer);
+            timer += Time.fixedDeltaTime / 5;
+            transform.position = Vector3.Lerp(endPos, newPos, timer);
         }
     }
 }
