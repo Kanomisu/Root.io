@@ -30,6 +30,9 @@ public class RootMovement : MonoBehaviour
 
     List<GameObject> nodes = new List<GameObject>();
 
+    float collisionGracePeriod = 2f;
+    bool isInvincible = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,6 +90,12 @@ public class RootMovement : MonoBehaviour
     {
         HandleInput();
         MoveRoot();
+
+        collisionGracePeriod -= Time.fixedDeltaTime;
+        if (isInvincible && collisionGracePeriod <= 0)
+        {
+            isInvincible = false;
+        }
     }
 
     void HandleInput()
@@ -143,9 +152,12 @@ public class RootMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") && !isInvincible)
         {
-            Debug.Log("White Woman Detected!");
+            WaterUI.instance.WaterSubtraction(10);
+
+            isInvincible = true;
+            collisionGracePeriod = 2f;
         }
     }
 }

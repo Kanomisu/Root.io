@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class WaterUI : MonoBehaviour
 {
     public Slider waterMeter;
-    float maxWater = 10;
+    float maxWater = 100;
     float currentWater;
     public static WaterUI instance;
 
@@ -25,7 +25,7 @@ public class WaterUI : MonoBehaviour
     //Deplete the water meter
     void Update()
     {
-        currentWater -= Time.deltaTime;
+        currentWater -= Time.deltaTime * 10;
 
         if (currentWater > 0)
         {
@@ -40,15 +40,12 @@ public class WaterUI : MonoBehaviour
     //For when you collide with a pocket of water
     public void WaterAddition(int amount)
     {
-        if (currentWater + amount <= 10)
-        {
-            currentWater += amount;
-            waterMeter.value = currentWater;
-        }
-        else
-        {
-            Debug.Log("Tree died");
-        }
+        currentWater += amount;
+        waterMeter.value = currentWater;
     }
-
+    public void WaterSubtraction(int amount)
+    {
+        currentWater -= amount;
+        waterMeter.value = currentWater;
+    }
 }
