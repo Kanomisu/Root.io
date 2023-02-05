@@ -27,7 +27,7 @@ public class TreeSpawner : MonoBehaviour
     {
         int score = ScoreManager.instance.score;
 
-        int numPieces = (int)Mathf.Floor((float)score / (float)ScoreManager.instance.milestoneScore);
+        int numPieces = (int)Mathf.Floor((float)score / (float)ScoreManager.instance.milestoneScore / 2);
 
         GameObject lastPiece;
 

@@ -59,7 +59,7 @@ public class CameraScript : MonoBehaviour
 
         if (endGame)
         {
-            timer += Time.fixedDeltaTime / 10;
+            timer += Time.fixedDeltaTime / 800;
             transform.position = Vector3.Lerp(endPos, newPos, timer);
         }
     }
